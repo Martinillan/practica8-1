@@ -3,7 +3,7 @@ const { Client } = require('pg');
 require('dotenv').config(); // Carga variables de entorno desde .env
 
 const app = express();
-
+const { sql } = require('@vercel/postgres');
 
 const path = require("path");
 
@@ -15,19 +15,9 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Configuración de conexión a PostgreSQL
-const client = new Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
 
-// Conexión a la base de datos
-client.connect()
-  .then(() => console.log('Conexión exitosa a PostgreSQL'))
-  .catch(err => console.error('Error al conectar a PostgreSQL:', err));
+
+
 
 
 // Ruta dinámica para obtener un empleado por nombre
@@ -36,7 +26,7 @@ app.get('/empleado/:nombre', async (req, res) => {
 
   try {
     // Realizamos la consulta a la base de datos
-    const result = await client.query('SELECT * FROM empleados WHERE nombre = $1', [nombre]);
+    const result = await sql('SELECT * FROM empleados WHERE nombre = $1', [nombre]);
 
     // Si se encuentra el empleado, enviamos los datos en formato JSON
     if (result.rows.length > 0) {
@@ -53,7 +43,7 @@ app.get('/empleado/:nombre', async (req, res) => {
 // Ruta para obtener los datos de la tabla empleados
 app.get('/empleados', async (req, res) => {
   try {
-    const result = await client.query('SELECT * FROM empleados;'); // Consulta a la tabla empleados
+    const result = await sql('SELECT * FROM empleados;'); // Consulta a la tabla empleados
     res.json(result.rows); // Devuelve los datos en formato JSON
   } catch (err) {
     console.error('Error al consultar la tabla empleados:', err);
