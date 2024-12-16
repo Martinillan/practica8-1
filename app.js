@@ -8,11 +8,11 @@ const app = express();
 const path = require("path");
 
 // Configurar Express para servir archivos estáticos desde la carpeta 'public'
-app.use(express.static(path.join(dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Ruta principal para cargar el archivo index.html
 app.get("/", (req, res) => {
-  res.sendFile(path.join(dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // Configuración de conexión a PostgreSQL
