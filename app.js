@@ -61,7 +61,5 @@ app.get('/empleados', async (req, res) => {
 
 // Iniciar el servidor
 const port = process.env.PORT || 5000; // Esto permitirá que Vercel use su puerto.
-app.listen(port, () => {
-  console.log(`Servidor corriendo en el puerto ${port}`);
-});
+
 
