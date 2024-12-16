@@ -5,9 +5,15 @@ require('dotenv').config(); // Carga variables de entorno desde .env
 const app = express();
 
 
+const path = require("path");
 
-// Middleware para servir archivos estáticos
-app.use(express.static('public'));
+// Configurar Express para servir archivos estáticos desde la carpeta 'public'
+app.use(express.static(path.join(dirname, "public")));
+
+// Ruta principal para cargar el archivo index.html
+app.get("/", (req, res) => {
+  res.sendFile(path.join(dirname, "public", "index.html"));
+});
 
 // Configuración de conexión a PostgreSQL
 const client = new Client({
@@ -23,10 +29,6 @@ client.connect()
   .then(() => console.log('Conexión exitosa a PostgreSQL'))
   .catch(err => console.error('Error al conectar a PostgreSQL:', err));
 
-// Ruta principal (sirve el archivo index.html)
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
 
 // Ruta dinámica para obtener un empleado por nombre
 app.get('/empleado/:nombre', async (req, res) => {
@@ -61,5 +63,5 @@ app.get('/empleados', async (req, res) => {
 
 // Iniciar el servidor
 const port = process.env.PORT || 5000; // Esto permitirá que Vercel use su puerto.
-
+module.exports = app;
 
