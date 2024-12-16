@@ -3,7 +3,8 @@ const { Client } = require('pg');
 require('dotenv').config(); // Carga variables de entorno desde .env
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000; // Esto permitirá que Vercel use su puerto.
+
 
 // Middleware para servir archivos estáticos
 app.use(express.static('public'));
